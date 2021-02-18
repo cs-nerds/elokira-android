@@ -11,16 +11,12 @@
         android:layout_marginStart="@dimen/linear_layout_margin"
         android:layout_marginEnd="@dimen/linear_layout_margin">
 
-        <TextView
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="@dimen/first_top_margin"
-            android:layout_weight="0"
-            android:fontFamily="@font/fugaz_one"
-            android:gravity="center"
-            android:text="@string/elokira"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textStyle="bold" />
+            android:src="@drawable/elokira_logo" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -39,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/firstNameErr"
-            android:layout_marginBottom="@dimen/bottom_edit_text_margin">
+            >
             <EditText
                 android:id="@+id/first_name"
                 android:layout_width="match_parent"
@@ -48,29 +44,15 @@
                 android:hint="@string/first_Name"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/phoneNumberErr">
-            <EditText
-                android:id="@+id/phoneNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:hint="@string/phone_number"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-
-
         <Button
             android:id="@+id/signUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
+            android:layout_gravity="center"
             android:background="@drawable/rounded_sign_in_button"
             android:layout_marginTop="@dimen/button_top_margin"
-            android:text="@string/sign_up"
+            android:text="@string/validate"
             android:textAllCaps="false"
             />
 

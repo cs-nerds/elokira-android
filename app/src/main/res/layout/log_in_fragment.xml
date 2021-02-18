@@ -11,11 +11,19 @@
         android:orientation="vertical"
         android:layout_marginStart="@dimen/linear_layout_margin"
         android:layout_marginEnd="@dimen/linear_layout_margin">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/first_top_margin"
+            android:src="@drawable/elokira_logo" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/idNoErr"
-            android:layout_marginTop="@dimen/first_top_margin">
+            >
             <EditText
                 android:id="@+id/id_number"
                 android:layout_width="match_parent"
