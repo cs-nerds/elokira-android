@@ -9,5 +9,14 @@
         android:id="@+id/signUpFragment"
         android:name="com.example.elokira.SignUpFragment"
         android:label="sign_up_fragment"
-        tools:layout="@layout/sign_up_fragment" />
+        tools:layout="@layout/sign_up_fragment" >
+        <action
+            android:id="@+id/action_signUpFragment_to_logInFragment"
+            app:destination="@id/logInFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/logInFragment"
+        android:name="com.example.elokira.LogInFragment"
+        android:label="log_in_fragment"
+        tools:layout="@layout/log_in_fragment" />
 </navigation>
