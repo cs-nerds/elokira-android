@@ -1,7 +1,6 @@
 package com.example.elokira
 
 import User
-import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.example.elokira.databinding.SignUpFragmentBinding
 import com.zhuinden.liveevent.observe
 
@@ -34,46 +34,53 @@ class SignUpFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
-        val emailErr = binding.emailErr
-        val passwordErr = binding.passwordErr
+        val idNoError = binding.idNoErr
+        val firstNameErr = binding.firstNameErr
+        val phoneNoError= binding.phoneNumberErr
 
 
         // TODO: Use the ViewModel
         binding.signUp.setOnClickListener {
-            val email = binding.email.text.toString()
-            val password = binding.password.text.toString()
-            val user: User = User(email, password)
+            val idNumber = binding.idNumber.text.toString()
+            val firstName = binding.firstName.text.toString()
+            val phoneNumber = binding.phoneNumber.text.toString()
+            val user: User = User(idNumber, firstName, phoneNumber)
             viewModel.signUpUser(user)
             Log.i("Sign Up Fragment", "User is ${user}")
+
+
         }
 
         viewModel.loginResult.observe(this) { result ->
             when (result) {
-                SignUpViewModel.LoginResult.EmailMissing -> {
+                SignUpViewModel.LoginResult.IdNoMissing -> {
                     Toast.makeText(
                         context, "Data is missing", Toast.LENGTH_LONG
                     ).show()
-                    emailErr.error = "Email required"
-                    emailErr.requestFocus()
+                    idNoError.error = "Email required"
+                    idNoError.requestFocus()
                 }
-                SignUpViewModel.LoginResult.PasswordMissing -> {
-                    passwordErr.error = "Password required"
-                    passwordErr.requestFocus()
+                SignUpViewModel.LoginResult.NameMissing -> {
+                    firstNameErr.error = "Password required"
+                    firstNameErr.requestFocus()
+                }
+                SignUpViewModel.LoginResult.PhoneNoMissing -> {
+                    phoneNoError.error = "Phone number required"
+                    phoneNoError.requestFocus()
                 }
                 SignUpViewModel.LoginResult.NetworkFailure -> {
+                    Toast.makeText(
+                        context, "Network Failure", Toast.LENGTH_LONG
+                    ).show()
                 }
 //                SignUpViewModel.LoginResult.NetworkError -> {
 //                    showToast(context, result.userMessage)
 //                }
-//                SignUpViewModel.LoginResult.Success -> {
-//                    val intent = Intent(applicationContext, HomeActivity::class.java)
-//                    intent.flags =
-//                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                    showToast(applicationContext, res.body()?.message)
-//                    Log.d("kjsfgxhufb", response.body()?.status.toString())
-//                    startActivity(intent)
-//                    finish()
-//                }
+                SignUpViewModel.LoginResult.Success -> {
+                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+//                    findNavController().navigate(actionSignUpFragmenttoLoginFragment)
+
+                }
                 else ->Toast.makeText(context, "Network Error", Toast.LENGTH_LONG)
             }
 
