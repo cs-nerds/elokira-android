@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context=".LogInFragment">
 
     <LinearLayout
@@ -22,13 +20,12 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/idNoErr"
+            android:id="@+id/idNoLoginErr"
             >
             <EditText
-                android:id="@+id/id_number"
+                android:id="@+id/id_number_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
                 android:hint="@string/id_number"
 
                 />
