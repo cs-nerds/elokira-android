@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Elokira</string>
-    <string name="password">Password</string>
+    <string name="id_number">ID Number</string>
     <string name="sign_up">Sign up</string>
-    <string name="email">Email</string>
+    <string name="first_Name">First Name</string>
     <string name="elokira">Elokira</string>
+    <string name="phone_number">Phone Number</string>
 </resources>
