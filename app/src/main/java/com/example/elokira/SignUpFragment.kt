@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.elokira.databinding.SignUpFragmentBinding
 import com.zhuinden.liveevent.observe
@@ -78,7 +80,7 @@ class SignUpFragment : Fragment() {
 //                }
                 SignUpViewModel.LoginResult.Success -> {
                     Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-//                    findNavController().navigate(actionSignUpFragmenttoLoginFragment)
+//                    findNavController().navigate(R.id.action_signUpFragment_to_logInFragment)
 
                 }
                 else ->Toast.makeText(context, "Network Error", Toast.LENGTH_LONG)
