@@ -46,30 +46,28 @@ class SignUpViewModel : ViewModel() {
         if(userEntry.firstName.isEmpty()){
             loginResultEmitter.emit(LoginResult.NameMissing)
         }
-        if(userEntry.phoneNumber.isEmpty()){
-            loginResultEmitter.emit(LoginResult.PhoneNoMissing)
-        }
-
-        GlobalScope.launch(Dispatchers.IO){
-            val isSuccessful = BuilderClass.apiService.createVoter(userEntry).awaitResponse().let { response ->
-                if(response.isSuccessful){
-                    loginResultEmitter.emit(LoginResult.Success)
-                    return@let true
-                }
-                else{
-//                    when (response.code()){
-//                    }
-
-                    Log.d("Response check", response.code().toString())
-                    Log.d("res error ", response.errorBody().toString()  )
-                    loginResultEmitter.emit(LoginResult.NetworkFailure)
-                    return@let false
-                }
-
-            }
 
 
-        }
+//        GlobalScope.launch(Dispatchers.IO){
+//            val isSuccessful = BuilderClass.apiService.createVoter(userEntry).awaitResponse().let { response ->
+//                if(response.isSuccessful){
+//                    loginResultEmitter.emit(LoginResult.Success)
+//                    return@let true
+//                }
+//                else{
+////                    when (response.code()){
+////                    }
+//
+//                    Log.d("Response check", response.code().toString())
+//                    Log.d("res error ", response.errorBody().toString()  )
+//                    loginResultEmitter.emit(LoginResult.NetworkFailure)
+//                    return@let false
+//                }
+//
+//            }
+//
+//
+//        }
 
     }
 

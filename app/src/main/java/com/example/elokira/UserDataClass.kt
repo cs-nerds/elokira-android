@@ -6,5 +6,4 @@ data class User(
 
     val firstName: String,
 
-    val phoneNumber: String
 )
