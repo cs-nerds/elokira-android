@@ -1,10 +1,16 @@
 package com.example.elokira
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
+import com.example.elokira.databinding.FragmentSplashBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +26,7 @@ class SplashFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var bining : FragmentSplashBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +40,32 @@ class SplashFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_splash, container, false)
+        bining = DataBindingUtil.inflate(inflater, R.layout.fragment_splash, container, false)
+        return bining.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        Log.i("Splash Fragment", "navigate to sign up fragment")
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Handler().postDelayed({
+            //check if shared prefrences == null
+                              Log.i("splash Fragment", "on delay with 3 sec")
+            val pref = activity?.getSharedPreferences(getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE) ?: return@postDelayed
+            val id = pref.getString("Authentication Code", null)
+            if(id != null){
+                findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+            }else{
+                findNavController().navigate(R.id.action_splashFragment_to_signUpLogInFragment)
+            }
+
+        }, 3000)
     }
 
     companion object {

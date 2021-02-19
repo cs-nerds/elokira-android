@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
+import com.example.elokira.databinding.LogInFragmentBinding
 
 class LogInFragment : Fragment() {
 
@@ -14,6 +16,7 @@ class LogInFragment : Fragment() {
     }
 
     private lateinit var viewModel: LogInViewModel
+    private lateinit var binding: LogInFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,6 +29,9 @@ class LogInFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(LogInViewModel::class.java)
         // TODO: Use the ViewModel
+        binding.getCode.setOnClickListener {
+            it.findNavController().navigate(R.id.action_logInFragment_to_getCodeFragment)
+        }
     }
 
 }

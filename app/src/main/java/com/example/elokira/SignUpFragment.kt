@@ -50,6 +50,7 @@ class SignUpFragment : Fragment() {
             viewModel.signUpUser(user)
             Log.i("Sign Up Fragment", "User is ${user}")
 
+            it.findNavController().navigate(R.id.action_signUpFragment_to_validateSignUpFragment)
 
         }
 

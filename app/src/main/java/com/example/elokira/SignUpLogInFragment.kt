@@ -5,6 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.example.elokira.databinding.FragmentSignUpLogInBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +24,7 @@ class SignUpLogInFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var binding: FragmentSignUpLogInBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +39,18 @@ class SignUpLogInFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up_log_in, container, false)
+        binding= DataBindingUtil.inflate(inflater, R.layout.fragment_sign_up_log_in, container, false)
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        binding.logInButton.setOnClickListener {
+            it.findNavController().navigate(R.id.action_signUpLogInFragment_to_logInFragment)
+        }
+        binding.signUpbutton.setOnClickListener {
+            it.findNavController().navigate(R.id.action_signUpLogInFragment_to_signUpFragment)
+        }
     }
 
     companion object {

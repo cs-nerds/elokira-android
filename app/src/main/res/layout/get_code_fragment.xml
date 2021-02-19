@@ -29,23 +29,23 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/phoneNoErr"
+            android:id="@+id/codeIdErr"
             android:layout_marginBottom="@dimen/bottom_edit_text_margin"
             android:layout_marginTop="@dimen/bottom_edit_text_margin">
             <EditText
-                android:id="@+id/phone_number"
+                android:id="@+id/code_id_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:lines="1"
-                tools:text = "1234"
+                tools:text = "123456"
                 android:maxLength="6"
                 android:textSize="18sp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/signUp"
+            android:id="@+id/getCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
