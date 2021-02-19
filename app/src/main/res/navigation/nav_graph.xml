@@ -12,7 +12,8 @@
         tools:layout="@layout/sign_up_fragment" >
         <action
             android:id="@+id/action_signUpFragment_to_validateSignUpFragment"
-            app:destination="@id/validateSignUpFragment" />
+            app:destination="@id/validateSignUpFragment"
+            app:popUpTo="@id/signUpFragment" />
     </fragment>
     <fragment
         android:id="@+id/logInFragment"
@@ -21,7 +22,8 @@
         tools:layout="@layout/log_in_fragment" >
         <action
             android:id="@+id/action_logInFragment_to_getCodeFragment"
-            app:destination="@id/getCodeFragment" />
+            app:destination="@id/getCodeFragment"
+            app:popUpTo="@id/nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -30,10 +32,12 @@
         tools:layout="@layout/fragment_splash" >
         <action
             android:id="@+id/action_splashFragment_to_signUpLogInFragment"
-            app:destination="@id/signUpLogInFragment" />
+            app:destination="@id/signUpLogInFragment"
+            app:popUpTo="@id/nav_graph" />
         <action
             android:id="@+id/action_splashFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/signUpLogInFragment"
@@ -42,10 +46,12 @@
         tools:layout="@layout/fragment_sign_up_log_in" >
         <action
             android:id="@+id/action_signUpLogInFragment_to_logInFragment"
-            app:destination="@id/logInFragment" />
+            app:destination="@id/logInFragment"
+            app:popUpTo="@id/signUpLogInFragment" />
         <action
             android:id="@+id/action_signUpLogInFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
+            app:destination="@id/signUpFragment"
+            app:popUpTo="@id/signUpLogInFragment" />
     </fragment>
     <fragment
         android:id="@+id/validateSignUpFragment"
@@ -54,7 +60,8 @@
         tools:layout="@layout/validate_sign_up_fragment" >
         <action
             android:id="@+id/action_validateSignUpFragment_to_getCodeFragment"
-            app:destination="@id/getCodeFragment" />
+            app:destination="@id/getCodeFragment"
+            app:popUpTo="@id/nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/getCodeFragment"
@@ -63,7 +70,8 @@
         tools:layout="@layout/get_code_fragment" >
         <action
             android:id="@+id/action_getCodeFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
