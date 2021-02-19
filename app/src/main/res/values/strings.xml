@@ -11,4 +11,5 @@
     <string name="log_in">Log In</string>
     <string name="sign_up">sign Up</string>
     <string name="enter_phone_no">Enter your phone number</string>
+    <string name="code">Enter the code sent to your number</string>
 </resources>
