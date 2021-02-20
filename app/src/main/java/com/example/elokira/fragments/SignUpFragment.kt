@@ -1,6 +1,7 @@
-package com.example.elokira
+package com.example.elokira.fragments
 
 import User
+import com.example.elokira.data.UserResponse
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -10,11 +11,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.example.elokira.R
+import com.example.elokira.viewmodels.SignUpViewModel
 import com.example.elokira.databinding.SignUpFragmentBinding
+import com.example.elokira.repositories.BuilderClass
 import com.zhuinden.liveevent.observe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.await
 
 class SignUpFragment : Fragment() {
 
@@ -48,9 +55,26 @@ class SignUpFragment : Fragment() {
 
             val user: User = User(idNumber, firstName)
             viewModel.signUpUser(user)
+            val lifecycleScope = MainScope()
+
+            lifecycleScope.launch{
+                val response = addUser(user) as UserResponse
+                Log.i("Log 1", response.toString())
+                if(response.firstName!=null && response.idNumber!= null){
+                    Log.i("Log", response.toString())
+                    Log.i("Log response", response.toString())
+                    viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.Success)
+                }
+                else{
+//
+                    Log.d("Response check", response.toString())
+                    Log.d("res error ", response.toString()  )
+                    viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.NetworkFailure)
+                }
+            }
+
             Log.i("Sign Up Fragment", "User is ${user}")
 
-            it.findNavController().navigate(R.id.action_signUpFragment_to_validateSignUpFragment)
 
         }
 
@@ -60,31 +84,35 @@ class SignUpFragment : Fragment() {
                     Toast.makeText(
                         context, "Data is missing", Toast.LENGTH_LONG
                     ).show()
-                    idNoError.error = "Email required"
+                    idNoError.error = "ID number required"
                     idNoError.requestFocus()
                 }
                 SignUpViewModel.LoginResult.NameMissing -> {
-                    firstNameErr.error = "Password required"
+                    firstNameErr.error = "First name required"
                     firstNameErr.requestFocus()
                 }
 
-//                SignUpViewModel.LoginResult.NetworkFailure -> {
-//                    Toast.makeText(
-//                        context, "Network Failure", Toast.LENGTH_LONG
-//                    ).show()
+                SignUpViewModel.LoginResult.NetworkFailure -> {
+                    Toast.makeText(
+                        context, "Network Failure", Toast.LENGTH_LONG
+                    ).show()
+                }
+//                SignUpViewModel.LoginResult.NetworkError -> {
+//                    showToast(context, result.userMessage)
 //                }
-////                SignUpViewModel.LoginResult.NetworkError -> {
-////                    showToast(context, result.userMessage)
-////                }
-//                SignUpViewModel.LoginResult.Success -> {
-//                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-////                    findNavController().navigate(R.id.action_signUpFragment_to_logInFragment)
-//
-//                }
+                SignUpViewModel.LoginResult.Success -> {
+                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_signUpFragment_to_validateSignUpFragment)
+                }
                 else ->Toast.makeText(context, "Network Error", Toast.LENGTH_LONG)
             }
 
         }
+
+    }
+    private suspend fun addUser(userEntry: User): Any = withContext(Dispatchers.IO){
+        //add user to database via an API
+       BuilderClass.apiService.createVoter(userEntry).await()
 
     }
 

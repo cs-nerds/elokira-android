@@ -1,4 +1,4 @@
-package com.example.elokira
+package com.example.elokira.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import com.example.elokira.R
+import com.example.elokira.viewmodels.ValidateSignUpViewModel
 import com.example.elokira.databinding.ValidateSignUpFragmentBinding
 
 class ValidateSignUpFragment : Fragment() {
@@ -23,7 +25,8 @@ class ValidateSignUpFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding= DataBindingUtil. inflate(inflater,R.layout.validate_sign_up_fragment, container, false)
+        binding= DataBindingUtil. inflate(inflater,
+            R.layout.validate_sign_up_fragment, container, false)
         return binding.root
     }
 

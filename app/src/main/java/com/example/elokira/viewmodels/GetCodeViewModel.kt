@@ -1,7 +1,7 @@
-package com.example.elokira
+package com.example.elokira.viewmodels
 
 import androidx.lifecycle.ViewModel
 
-class HomeViewModel : ViewModel() {
+class GetCodeViewModel : ViewModel() {
     // TODO: Implement the ViewModel
 }

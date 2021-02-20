@@ -1,4 +1,4 @@
-package com.example.elokira
+package com.example.elokira.fragments
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.elokira.viewmodels.HomeViewModel
+import com.example.elokira.R
 
 class HomeFragment : Fragment() {
 

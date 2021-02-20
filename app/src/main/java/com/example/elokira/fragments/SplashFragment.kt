@@ -1,4 +1,4 @@
-package com.example.elokira
+package com.example.elokira.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import com.example.elokira.R
 import com.example.elokira.databinding.FragmentSplashBinding
 
 // TODO: Rename parameter arguments, choose names that match

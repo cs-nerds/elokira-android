@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.elokira.SignUpFragment"
+        android:name="com.example.elokira.fragments.SignUpFragment"
         android:label="sign_up_fragment"
         tools:layout="@layout/sign_up_fragment" >
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/logInFragment"
-        android:name="com.example.elokira.LogInFragment"
+        android:name="com.example.elokira.fragments.LogInFragment"
         android:label="log_in_fragment"
         tools:layout="@layout/log_in_fragment" >
         <action
@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/validateSignUpFragment"
-        android:name="com.example.elokira.ValidateSignUpFragment"
+        android:name="com.example.elokira.fragments.ValidateSignUpFragment"
         android:label="validate_sign_up_fragment"
         tools:layout="@layout/validate_sign_up_fragment" >
         <action
@@ -65,7 +65,7 @@
     </fragment>
     <fragment
         android:id="@+id/getCodeFragment"
-        android:name="com.example.elokira.GetCodeFragment"
+        android:name="com.example.elokira.fragments.GetCodeFragment"
         android:label="get_code_fragment"
         tools:layout="@layout/get_code_fragment" >
         <action
@@ -75,7 +75,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.elokira.HomeFragment"
+        android:name="com.example.elokira.fragments.HomeFragment"
         android:label="home_fragment"
         tools:layout="@layout/home_fragment" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.elokira
+package com.example.elokira.fragments
 
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import com.example.elokira.viewmodels.GetCodeViewModel
+import com.example.elokira.R
 import com.example.elokira.databinding.GetCodeFragmentBinding
 
 class GetCodeFragment : Fragment() {
