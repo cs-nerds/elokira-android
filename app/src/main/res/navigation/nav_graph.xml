@@ -13,7 +13,7 @@
         <action
             android:id="@+id/action_signUpFragment_to_validateSignUpFragment"
             app:destination="@id/validateSignUpFragment"
-            app:popUpTo="@id/signUpFragment" />
+            app:popUpTo="@id/nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/logInFragment"
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.elokira.SplashFragment"
+        android:name="com.example.elokira.fragments.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpLogInFragment"
-        android:name="com.example.elokira.SignUpLogInFragment"
+        android:name="com.example.elokira.fragments.SignUpFragment"
         android:label="fragment_sign_up_log_in"
         tools:layout="@layout/fragment_sign_up_log_in" >
         <action
