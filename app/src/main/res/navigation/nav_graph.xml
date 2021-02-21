@@ -12,8 +12,7 @@
         tools:layout="@layout/sign_up_fragment" >
         <action
             android:id="@+id/action_signUpFragment_to_validateSignUpFragment"
-            app:destination="@id/validateSignUpFragment"
-            app:popUpTo="@id/nav_graph" />
+            app:destination="@id/validateSignUpFragment" />
     </fragment>
     <fragment
         android:id="@+id/logInFragment"
@@ -41,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpLogInFragment"
-        android:name="com.example.elokira.fragments.SignUpFragment"
+        android:name="com.example.elokira.fragments.SignUpLogInFragment"
         android:label="fragment_sign_up_log_in"
         tools:layout="@layout/fragment_sign_up_log_in" >
         <action

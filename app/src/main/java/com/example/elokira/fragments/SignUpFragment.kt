@@ -21,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 import retrofit2.await
 import retrofit2.awaitResponse
 
@@ -57,22 +58,34 @@ class SignUpFragment : Fragment() {
             val user: User = User(idNumber, firstName)
             Log.i("Sign Up Fragment", "User is ${user}")
             viewModel.signUpUser(user)
-            val lifecycleScope = MainScope()
 
+            val lifecycleScope = MainScope()
             lifecycleScope.launch{
-                val response = addUser(user) as UserResponse
-                Log.i("Log 1", response.toString())
-                if(response.firstName!=null && response.idNumber!= null){
-                    Log.i("Log response", response.toString())
-                    viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.Success)
+                val response = addUser(user)
+                val userResponse = response.body()
+                Log.i("Log 1", userResponse.toString())
+                when(response.code()){
+                    200 -> {
+                        Log.i("Log response", response.toString())
+                        viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.Success)
+                    } 403 -> {
+                        Log.d("Response error ", response.toString())
+                        viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.IdNoMissing)
+                         viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.NameMissing)
+                       Toast.makeText(
+                           context, "Failed, Enter correct ID number and first name as per your ID", Toast.LENGTH_LONG
+                       ).show()
+                    }
+
+                    else -> Toast.makeText(context, "Unexpected, try again later", Toast.LENGTH_LONG).show()
+
                 }
-                else{
-                    Toast.makeText(context, "Unexpected, try again later", Toast.LENGTH_LONG).show()
-                }
+
             }
 
 
         }
+
 
         viewModel.loginResult.observe(this) { result ->
             when (result) {
@@ -80,11 +93,11 @@ class SignUpFragment : Fragment() {
                     Toast.makeText(
                         context, "Data is missing", Toast.LENGTH_LONG
                     ).show()
-                    idNoError.error = "ID number required"
+                    idNoError.error = "Enter id number as in your ID"
                     idNoError.requestFocus()
                 }
                 SignUpViewModel.LoginResult.NameMissing -> {
-                    firstNameErr.error = "First name required"
+                    firstNameErr.error = "Enter first name as in your ID"
                     firstNameErr.requestFocus()
                 }
 
@@ -106,21 +119,9 @@ class SignUpFragment : Fragment() {
         }
 
     }
-    private suspend fun addUser(userEntry: User): Any = withContext(Dispatchers.IO){
+    private suspend fun addUser(userEntry: User): Response<UserResponse> = withContext(Dispatchers.IO){
         //add user to database via an API
-       BuilderClass.apiService.createVoter(userEntry).awaitResponse().let { response ->
-           when(response.code() ){
-               200 -> return@withContext response
-               403 -> {
-                   Log.d("Response check", response.toString())
-                   Log.d("res error ", response.toString()  )
-                   viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.NetworkFailure)
-               }
-               else -> Toast.makeText(context, "Error: Try again later", Toast.LENGTH_LONG).show()
-           }
-
-
-       }
+        BuilderClass.apiService.createVoter(userEntry).awaitResponse()
 
     }
 
