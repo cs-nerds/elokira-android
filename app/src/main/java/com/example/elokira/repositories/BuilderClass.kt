@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class BuilderClass () {
     companion object {
-        const val BASE_URL = "http://192.168.100.14:8082"
+        const val BASE_URL = "https://api.elokiravote.ml"
 //        http://192.168.100.14:8082
 
         private val gson: Gson = GsonBuilder()

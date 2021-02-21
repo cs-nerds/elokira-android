@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.example.elokira.R
@@ -33,6 +34,7 @@ class SignUpFragment : Fragment() {
 
     private lateinit var viewModel: SignUpViewModel
     private lateinit var binding: SignUpFragmentBinding
+    private lateinit var userResponse: UserResponse
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +54,8 @@ class SignUpFragment : Fragment() {
 
         // TODO: Use the ViewModel
         binding.signUp.setOnClickListener {
+            val bar = binding.progressBar
+//            bar.visibility = view.visibilit
             val idNumber = binding.idNumber.text.toString()
             val firstName = binding.firstName.text.toString()
 
@@ -62,7 +66,11 @@ class SignUpFragment : Fragment() {
             val lifecycleScope = MainScope()
             lifecycleScope.launch{
                 val response = addUser(user)
-                val userResponse = response.body()
+                response.body().also {
+                    if (it != null) {
+                        userResponse = it
+                    }
+                }
                 Log.i("Log 1", userResponse.toString())
                 when(response.code()){
                     200 -> {
@@ -111,7 +119,8 @@ class SignUpFragment : Fragment() {
 //                }
                 SignUpViewModel.LoginResult.Success -> {
                     Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_signUpFragment_to_validateSignUpFragment)
+
+                    findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToValidateSignUpFragment(userResponse.firstName, userResponse.lastName, userResponse.idNumber))
                 }
                 else ->Toast.makeText(context, "Network Error", Toast.LENGTH_LONG)
             }

@@ -12,7 +12,8 @@
         tools:layout="@layout/sign_up_fragment" >
         <action
             android:id="@+id/action_signUpFragment_to_validateSignUpFragment"
-            app:destination="@id/validateSignUpFragment" />
+            app:destination="@id/validateSignUpFragment"
+            app:popUpTo="@id/signUpLogInFragment" />
     </fragment>
     <fragment
         android:id="@+id/logInFragment"
@@ -61,6 +62,15 @@
             android:id="@+id/action_validateSignUpFragment_to_getCodeFragment"
             app:destination="@id/getCodeFragment"
             app:popUpTo="@id/nav_graph" />
+        <argument
+            android:name="firstName"
+            app:argType="string" />
+        <argument
+            android:name="lastName"
+            app:argType="string" />
+        <argument
+            android:name="idNumber"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/getCodeFragment"
