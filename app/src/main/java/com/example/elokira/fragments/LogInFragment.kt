@@ -27,9 +27,7 @@ import com.example.elokira.R
 import com.example.elokira.databinding.LogInFragmentBinding
 import com.example.elokira.repositories.BuilderClass
 import com.zhuinden.liveevent.observe
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import retrofit2.Response
 import retrofit2.awaitResponse
 
@@ -41,6 +39,7 @@ class LogInFragment : Fragment() {
 
     private lateinit var viewModel: LogInViewModel
     private lateinit var binding: LogInFragmentBinding
+    private lateinit var loginResponse: Authenticate
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,16 +60,22 @@ class LogInFragment : Fragment() {
 
             lifecycleScope.launch {
                 val response = loginUser(idNumber)
-                val loginResponse = response.body()
+
+                loginResponse = Authenticate("", "")
 
                 Log.i("Login Request response is ", response.code().toString())
                 when(response.code()){
                     201 -> {
+                        loginResponse = response.body()!!
                         Log.i("Login Request response with code ${response.code()}", loginResponse.toString())
                         viewModel.loginResultEmitter.emit(ResultObserver.Success)
                     }
                     404 ->{
-                        Log.i("Login Request response with code ${response.code()}", loginResponse.toString())
+                        Log.i("Login Request response with code ${response.code()}", response.body().toString())
+                        viewModel.loginResultEmitter.emit(ResultObserver.IdNoMissing)
+                    }
+                    else -> {
+                        Log.i("Login Request response with code ${response.code()}", response.body().toString())
                         viewModel.loginResultEmitter.emit(ResultObserver.IdNoMissing)
                     }
                 }
@@ -92,7 +97,7 @@ class LogInFragment : Fragment() {
 
                 }
                 ResultObserver.Success ->{
-                    findNavController().navigate(LogInFragmentDirections.actionLogInFragmentToGetCodeFragment())
+                    findNavController().navigate(LogInFragmentDirections.actionLogInFragmentToGetCodeFragment(loginResponse.loginId))
                 }
             }
 
@@ -118,6 +123,35 @@ class LogInFragment : Fragment() {
         spannableString.setSpan(clickableSpan, 21, 28, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE )
         return spannableString
     }
+
+//    fun returnResponse(loginID: LoginRequest): Deferred<Response<Authenticate>> = lifecycleScope.async{
+//        val response = loginUser(loginID)
+//
+//        loginResponse = response.body().also {
+//            if(response.code() == 200){
+//                if (it != null) {
+//                    loginResponse = it
+//                }
+//            }
+//        }!!
+//        Log.i("Login Request response is ", response.code().toString())
+//        when(response.code()){
+//            201 -> {
+//                Log.i("Login Request response with code ${response.code()}", loginResponse.toString())
+//                viewModel.loginResultEmitter.emit(ResultObserver.Success)
+//                return@async loginUser(loginID)
+//            }
+//            404 ->{
+//                Log.i("Login Request response with code ${response.code()}", response.body().toString())
+//                viewModel.loginResultEmitter.emit(ResultObserver.IdNoMissing)
+//            }
+//            else -> {
+//                Log.i("Login Request response with code ${response.code()}", response.body().toString())
+//                viewModel.loginResultEmitter.emit(ResultObserver.IdNoMissing)
+//            }
+//        }
+//    }
+
 
 
 }

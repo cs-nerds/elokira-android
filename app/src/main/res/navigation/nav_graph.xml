@@ -92,6 +92,9 @@
             android:id="@+id/action_getCodeFragment_to_homeFragment"
             app:destination="@id/homeFragment"
             app:popUpTo="@id/nav_graph" />
+        <argument
+            android:name="loginId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"

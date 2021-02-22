@@ -4,11 +4,12 @@ import com.zhuinden.eventemitter.EventSource
 sealed class ResultObserver {
     object IdNoMissing : ResultObserver()
 
+
     object NameMissing : ResultObserver()
 
     object PhoneNoMissing: ResultObserver()
 
-    object codeMissing: ResultObserver()
+    object CodeMissing: ResultObserver()
 
     class NetworkError(val userMessage: String) : ResultObserver()
 

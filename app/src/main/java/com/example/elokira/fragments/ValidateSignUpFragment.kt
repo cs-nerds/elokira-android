@@ -32,6 +32,7 @@ class ValidateSignUpFragment : Fragment() {
 
     private lateinit var viewModel: ValidateSignUpViewModel
     private lateinit var binding: ValidateSignUpFragmentBinding
+    private lateinit var login: Authenticate
 
 
     override fun onCreateView(
@@ -66,11 +67,12 @@ class ValidateSignUpFragment : Fragment() {
                 val response = addPhoneNumber(verifiedUser)
                 Log.i("Verified login response code ${response.code()}", response.body().toString())
 
-                val login = response.body()
+
                 Log.i("Verified login message", login.toString())
                 when(response.code()){
                     201 -> {
                         Log.i("Verified login message with code 201 =  ${response.code()}", response.toString())
+                        login = response.body()!!
                         viewModel.verifiedResponseEmitter.emit(ValidateSignUpViewModel.VerifiedResponse.Success)
                     }
                     409 -> {
@@ -103,7 +105,7 @@ class ValidateSignUpFragment : Fragment() {
               }
               ValidateSignUpViewModel.VerifiedResponse.Success -> {
                   Toast.makeText(context, "Check sms for code", Toast.LENGTH_LONG).show()
-                  findNavController().navigate(ValidateSignUpFragmentDirections.actionValidateSignUpFragmentToGetCodeFragment())
+                  findNavController().navigate(ValidateSignUpFragmentDirections.actionValidateSignUpFragmentToGetCodeFragment(login.loginId))
               }
               else -> Toast.makeText(context, "Network Error", Toast.LENGTH_LONG).show()
           }

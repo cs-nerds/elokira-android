@@ -33,6 +33,7 @@
                 android:id="@+id/id_number_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:hint="@string/id_number"
 
                 />

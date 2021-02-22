@@ -33,10 +33,11 @@
             android:layout_marginBottom="@dimen/bottom_edit_text_margin"
             android:layout_marginTop="@dimen/bottom_edit_text_margin">
             <EditText
-                android:id="@+id/code_id_number"
+                android:id="@+id/code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
+                android:inputType="number"
                 android:lines="1"
                 tools:text = "123456"
                 android:maxLength="6"
@@ -45,7 +46,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/getCode"
+            android:id="@+id/enterCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
