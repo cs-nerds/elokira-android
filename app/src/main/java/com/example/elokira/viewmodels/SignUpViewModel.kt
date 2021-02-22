@@ -28,11 +28,6 @@ class SignUpViewModel : ViewModel() {
     val loginResultEmitter = EventEmitter<LoginResult>()
     val loginResult: EventSource<LoginResult> = loginResultEmitter
 
-    private var job: Job = Job()
-
-     val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main + job
-
     init{
         Log.i("sign up ViewModel", " View model created")
     }
@@ -52,13 +47,8 @@ class SignUpViewModel : ViewModel() {
 
         }
 
-
-
-
-
     override fun onCleared() {
         super.onCleared()
-        job.cancel()
     }
 
 

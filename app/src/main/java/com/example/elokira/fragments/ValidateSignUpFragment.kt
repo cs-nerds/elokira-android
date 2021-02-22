@@ -1,18 +1,30 @@
 package com.example.elokira.fragments
 
+import Login
+import VerifiedUser
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.elokira.R
 import com.example.elokira.viewmodels.ValidateSignUpViewModel
 import com.example.elokira.databinding.ValidateSignUpFragmentBinding
+import com.example.elokira.repositories.BuilderClass
+import com.zhuinden.liveevent.observe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Response
+import retrofit2.awaitResponse
 
 class ValidateSignUpFragment : Fragment() {
 
@@ -22,6 +34,7 @@ class ValidateSignUpFragment : Fragment() {
 
     private lateinit var viewModel: ValidateSignUpViewModel
     private lateinit var binding: ValidateSignUpFragmentBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,16 +52,64 @@ class ValidateSignUpFragment : Fragment() {
         val args = ValidateSignUpFragmentArgs.fromBundle(requireArguments())
         val names = binding.names
         val idNumber = binding.validIdNo
+        val phoneNoErr = binding.phoneNoErr
         names.text = "${args.firstName} ${ args.lastName}"
         idNumber.text = args.idNumber
 
         binding.validateSignUp.setOnClickListener {
+
+            val phoneNumber = binding.phoneNumber.text.toString()
+            val verifiedUser = VerifiedUser(args.firstName,args.lastName, args.idNumber, phoneNumber)
+            viewModel.verifyUser(verifiedUser)
+            Log.i("Verified user is", verifiedUser.toString())
+
+            val lifecycleScope = MainScope()
             lifecycleScope.launch {
-                
+                val response = addPhoneNumber(verifiedUser)
+                Log.i("Verified login response code ${response.code()}", response.body().toString())
+
+                val login = response.body()
+                Log.i("Verified login message", login.toString())
+                when(response.code()){
+                    201 -> {
+                        Log.i("Verified login message with code 201 =  ${response.code()}", response.toString())
+                        viewModel.verifiedResponseEmitter.emit(ValidateSignUpViewModel.VerifiedResponse.PhoneNoMissing)
+                    }
+                    409 -> {
+                        Log.i("Verified Login message with code 409 = ${response.code()}", response.message())
+                        viewModel.verifiedResponseEmitter.emit(ValidateSignUpViewModel.VerifiedResponse.NetworkFailure)
+                    }
+                    else -> {
+                        Log.i("Verified Login with any other code ${response.code()}", response.message().toString() )
+                        viewModel.verifiedResponseEmitter.emit(ValidateSignUpViewModel.VerifiedResponse.NetworkFailure)
+                    }
+                }
             }
-            it.findNavController().navigate(R.id.action_validateSignUpFragment_to_getCodeFragment)
+
         }
-        // TODO: Use the ViewModel
+      viewModel.verifiedResponse.observe(this){result ->
+          when(result){
+              ValidateSignUpViewModel.VerifiedResponse.PhoneNoMissing -> {
+                  Toast.makeText(
+                      context, "Data is missing", Toast.LENGTH_LONG
+                  ).show()
+                  phoneNoErr.error="Phone number required"
+                  phoneNoErr.requestFocus()
+              }
+              ValidateSignUpViewModel.VerifiedResponse.NetworkFailure -> {
+                  Toast.makeText(context, "Failed, try again", Toast.LENGTH_LONG).show()
+              }
+              ValidateSignUpViewModel.VerifiedResponse.Success -> {
+                  Toast.makeText(context, "Check sms for code", Toast.LENGTH_LONG).show()
+                  findNavController().navigate(ValidateSignUpFragmentDirections.actionValidateSignUpFragmentToGetCodeFragment())
+              }
+              else -> Toast.makeText(context, "Network Error", Toast.LENGTH_LONG).show()
+          }
+      }
+    }
+
+    private suspend fun addPhoneNumber(verifiedUser: VerifiedUser): Response<Login> = withContext(Dispatchers.IO){
+        BuilderClass.apiService.createUser(verifiedUser).awaitResponse()
     }
 
 }

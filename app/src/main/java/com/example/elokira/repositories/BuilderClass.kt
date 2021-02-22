@@ -11,7 +11,6 @@ class BuilderClass () {
 //        http://192.168.100.14:8082
 
         private val gson: Gson = GsonBuilder()
-            .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
             .create()
 
         val retrofit: Retrofit = Retrofit.Builder()

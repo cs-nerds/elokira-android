@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.example.elokira.R
@@ -23,7 +22,6 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
-import retrofit2.await
 import retrofit2.awaitResponse
 
 class SignUpFragment : Fragment() {
@@ -56,8 +54,8 @@ class SignUpFragment : Fragment() {
         binding.signUp.setOnClickListener {
             val bar = binding.progressBar
 //            bar.visibility = view.visibilit
-            val idNumber = binding.idNumber.text.toString()
-            val firstName = binding.firstName.text.toString()
+            val idNumber = binding.idNumber.text.toString().trim()
+            val firstName = binding.firstName.text.toString().trim()
 
             val user: User = User(idNumber, firstName)
             Log.i("Sign Up Fragment", "User is ${user}")
@@ -122,7 +120,7 @@ class SignUpFragment : Fragment() {
 
                     findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToValidateSignUpFragment(userResponse.firstName, userResponse.lastName, userResponse.idNumber))
                 }
-                else ->Toast.makeText(context, "Network Error", Toast.LENGTH_LONG)
+                else ->Toast.makeText(context, "Network Error", Toast.LENGTH_LONG).show()
             }
 
         }
@@ -130,7 +128,7 @@ class SignUpFragment : Fragment() {
     }
     private suspend fun addUser(userEntry: User): Response<UserResponse> = withContext(Dispatchers.IO){
         //add user to database via an API
-        BuilderClass.apiService.createVoter(userEntry).awaitResponse()
+        BuilderClass.apiService.verifyUser(userEntry).awaitResponse()
 
     }
 
