@@ -23,7 +23,7 @@
         <action
             android:id="@+id/action_logInFragment_to_getCodeFragment"
             app:destination="@id/getCodeFragment"
-            app:popUpTo="@id/nav_graph" />
+            app:popUpTo="@id/signUpLogInFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -61,7 +61,7 @@
         <action
             android:id="@+id/action_validateSignUpFragment_to_getCodeFragment"
             app:destination="@id/getCodeFragment"
-            app:popUpTo="@id/nav_graph" />
+            app:popUpTo="@id/signUpLogInFragment" />
         <argument
             android:name="firstName"
             app:argType="string" />

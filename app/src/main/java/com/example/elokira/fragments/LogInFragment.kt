@@ -1,16 +1,29 @@
 package com.example.elokira.fragments
 
+import Authenticate
+import LoginRequest
+import ResultObserver
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.elokira.viewmodels.LogInViewModel
 import com.example.elokira.R
 import com.example.elokira.databinding.LogInFragmentBinding
+import com.example.elokira.repositories.BuilderClass
+import com.zhuinden.liveevent.observe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Response
+import retrofit2.awaitResponse
 
 class LogInFragment : Fragment() {
 
@@ -32,10 +45,46 @@ class LogInFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(LogInViewModel::class.java)
+        val idNoError = binding.idNoLoginErr
         // TODO: Use the ViewModel
         binding.getCode.setOnClickListener {
-            it.findNavController().navigate(R.id.action_logInFragment_to_getCodeFragment)
+            val idNumber = LoginRequest(binding.idNumberLogin.text.toString().trim())
+            viewModel.loginUser(idNumber)
+
+            lifecycleScope.launch {
+                val response = loginUser(idNumber)
+                val loginResponse = response.body()
+
+                when(response.code()){
+                    200 -> {
+                        Log.i("Login Request response with code ${response.code()}", loginResponse.toString())
+                        viewModel.loginResultEmitter.emit(ResultObserver.Success)
+                    }
+                    404 ->{
+                        Log.i("Login Request response with code ${response.code()}", loginResponse.toString())
+                        viewModel.loginResultEmitter.emit(ResultObserver.IdNoMissing)
+                    }
+                }
+            }
+
         }
+
+        viewModel.loginResult.observe(this){result ->
+            when(result){
+                ResultObserver.IdNoMissing ->{
+                    idNoError.error = "Enter id number as in your ID"
+                    idNoError.requestFocus()
+                }
+                ResultObserver.Success ->{
+                    findNavController().navigate(LogInFragmentDirections.actionLogInFragmentToGetCodeFragment())
+                }
+            }
+
+        }
+    }
+
+    private suspend fun loginUser(loginUserId: LoginRequest): Response<Authenticate> = withContext(Dispatchers.IO){
+        BuilderClass.apiService.loginUser(loginUserId).awaitResponse()
     }
 
 }

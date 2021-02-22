@@ -1,6 +1,6 @@
 package com.example.elokira.fragments
 
-import Login
+import Authenticate
 import VerifiedUser
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -11,8 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.elokira.R
 import com.example.elokira.viewmodels.ValidateSignUpViewModel
@@ -113,7 +111,7 @@ class ValidateSignUpFragment : Fragment() {
       }
     }
 
-    private suspend fun addPhoneNumber(verifiedUser: VerifiedUser): Response<Login> = withContext(Dispatchers.IO){
+    private suspend fun addPhoneNumber(verifiedUser: VerifiedUser): Response<Authenticate> = withContext(Dispatchers.IO){
         BuilderClass.apiService.createUser(verifiedUser).awaitResponse()
     }
 
