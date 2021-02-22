@@ -16,6 +16,13 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/first_top_margin"
             android:src="@drawable/elokira_logo" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottom_edit_text_margin"
+            android:text="@string/log_in"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:textStyle="bold"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"

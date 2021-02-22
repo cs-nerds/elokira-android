@@ -14,6 +14,10 @@
             android:id="@+id/action_signUpFragment_to_validateSignUpFragment"
             app:destination="@id/validateSignUpFragment"
             app:popUpTo="@id/signUpLogInFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_logInFragment"
+            app:destination="@id/logInFragment"
+            app:popUpTo="@id/signUpLogInFragment" />
     </fragment>
     <fragment
         android:id="@+id/logInFragment"

@@ -18,6 +18,8 @@ class SignUpViewModel : ViewModel() {
 
         object PhoneNoMissing: LoginResult()
 
+        object UserExists: LoginResult()
+
         class NetworkError(val userMessage: String) : LoginResult()
 
         object NetworkFailure : LoginResult()

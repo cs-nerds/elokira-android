@@ -63,8 +63,9 @@ class LogInFragment : Fragment() {
                 val response = loginUser(idNumber)
                 val loginResponse = response.body()
 
+                Log.i("Login Request response is ", response.code().toString())
                 when(response.code()){
-                    200 -> {
+                    201 -> {
                         Log.i("Login Request response with code ${response.code()}", loginResponse.toString())
                         viewModel.loginResultEmitter.emit(ResultObserver.Success)
                     }

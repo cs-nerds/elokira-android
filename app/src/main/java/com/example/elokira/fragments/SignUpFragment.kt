@@ -1,5 +1,6 @@
 package com.example.elokira.fragments
 
+import LoginRequest
 import User
 import com.example.elokira.data.UserResponse
 import androidx.lifecycle.ViewModelProvider
@@ -17,10 +18,7 @@ import com.example.elokira.viewmodels.SignUpViewModel
 import com.example.elokira.databinding.SignUpFragmentBinding
 import com.example.elokira.repositories.BuilderClass
 import com.zhuinden.liveevent.observe
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import retrofit2.Response
 import retrofit2.awaitResponse
 
@@ -62,36 +60,39 @@ class SignUpFragment : Fragment() {
             viewModel.signUpUser(user)
 
             val lifecycleScope = MainScope()
+
             lifecycleScope.launch{
-                val response = addUser(user)
-                response.body().also {
-                    if (it != null) {
-                        userResponse = it
-                    }
-                }
-                Log.i("Log 1", userResponse.toString())
-                when(response.code()){
-                    200 -> {
-                        Log.i("Log response", response.toString())
-                        viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.Success)
-                    } 403 -> {
+                    val response = addUser(user)
+
+//
+                    Log.i("Log 1", response.body().toString())
+                    when(response.code()){
+                        200 -> {
+                            Log.i("Log response", response.toString())
+                            userResponse = response.body()!!
+                            viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.Success)
+                        } 403 -> {
                         Log.d("Response error ", response.toString())
                         viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.IdNoMissing)
-                         viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.NameMissing)
-                       Toast.makeText(
-                           context, "Failed, Enter correct ID number and first name as per your ID", Toast.LENGTH_LONG
-                       ).show()
+                        viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.NameMissing)
+                        Toast.makeText(
+                            context, "Failed, Enter correct ID number and first name as per your ID", Toast.LENGTH_LONG
+                        ).show()
                     }
+                        409 ->{
+                            viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.UserExists)
+                        }
 
-                    else -> Toast.makeText(context, "Unexpected, try again later", Toast.LENGTH_LONG).show()
+                        else -> Toast.makeText(context, "Unexpected, try again later", Toast.LENGTH_LONG).show()
 
-                }
+                    }
 
             }
 
 
-        }
 
+
+        }
 
         viewModel.loginResult.observe(this) { result ->
             when (result) {
@@ -111,6 +112,10 @@ class SignUpFragment : Fragment() {
                     Toast.makeText(
                         context, "Failed, Enter correct ID number and first name as per your ID", Toast.LENGTH_LONG
                     ).show()
+                }
+                SignUpViewModel.LoginResult.UserExists -> {
+                    Toast.makeText(context, "User already exists", Toast.LENGTH_SHORT)
+                    findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToLogInFragment())
                 }
 //                SignUpViewModel.LoginResult.NetworkError -> {
 //                    showToast(context, result.userMessage)

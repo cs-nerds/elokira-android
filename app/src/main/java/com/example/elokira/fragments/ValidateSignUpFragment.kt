@@ -71,7 +71,7 @@ class ValidateSignUpFragment : Fragment() {
                 when(response.code()){
                     201 -> {
                         Log.i("Verified login message with code 201 =  ${response.code()}", response.toString())
-                        viewModel.verifiedResponseEmitter.emit(ValidateSignUpViewModel.VerifiedResponse.PhoneNoMissing)
+                        viewModel.verifiedResponseEmitter.emit(ValidateSignUpViewModel.VerifiedResponse.Success)
                     }
                     409 -> {
                         Log.i("Verified Login message with code 409 = ${response.code()}", response.message())
@@ -99,7 +99,6 @@ class ValidateSignUpFragment : Fragment() {
                   Toast.makeText(context, "Failed, try again", Toast.LENGTH_LONG).show()
               }
               ValidateSignUpViewModel.VerifiedResponse.UserExists -> {
-                  Toast.makeText(context, "res", Toast.LENGTH_SHORT).show()
                   findNavController().navigate(ValidateSignUpFragmentDirections.actionValidateSignUpFragmentToLogInFragment2())
               }
               ValidateSignUpViewModel.VerifiedResponse.Success -> {
