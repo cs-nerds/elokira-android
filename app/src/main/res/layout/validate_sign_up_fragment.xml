@@ -49,6 +49,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
+                android:maxLines="1"
+                android:maxLength="13"
                 android:hint="@string/phone_number"
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -63,7 +65,22 @@
             android:layout_marginTop="@dimen/button_top_margin"
             android:text="@string/sign_me_up"
             android:textAllCaps="false"
+            android:visibility="visible"
             />
+
+        <RelativeLayout
+            android:id="@+id/loadingPanel"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:gravity="center"
+            android:visibility="invisible">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true" />
+        </RelativeLayout>
+
 
 
     </LinearLayout>

@@ -4,4 +4,5 @@
     <dimen name="button_top_margin">32dp</dimen>
     <dimen name="bottom_edit_text_margin">16dp</dimen>
     <dimen name="first_top_margin">180dp</dimen>
+    <dimen name="first_screen_top_margin">100dp</dimen>
 </resources>

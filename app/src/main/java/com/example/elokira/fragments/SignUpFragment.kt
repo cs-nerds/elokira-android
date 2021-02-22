@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.example.elokira.R
@@ -26,7 +28,9 @@ class SignUpFragment : Fragment() {
 
     companion object {
         fun newInstance() = SignUpFragment()
+
     }
+
 
     private lateinit var viewModel: SignUpViewModel
     private lateinit var binding: SignUpFragmentBinding
@@ -50,8 +54,11 @@ class SignUpFragment : Fragment() {
 
         // TODO: Use the ViewModel
         binding.signUp.setOnClickListener {
-            val bar = binding.progressBar
-//            bar.visibility = view.visibilit
+            it.hideKeyboard()
+            val bar = binding.loadingPanel
+            bar.visibility = View.VISIBLE
+            val signUp = binding.signUp
+            signUp.visibility = View.INVISIBLE
             val idNumber = binding.idNumber.text.toString().trim()
             val firstName = binding.firstName.text.toString().trim()
 
@@ -72,6 +79,8 @@ class SignUpFragment : Fragment() {
                             userResponse = response.body()!!
                             viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.Success)
                         } 403 -> {
+                        signUp.visibility = View.VISIBLE
+                        bar.visibility = View.INVISIBLE
                         Log.d("Response error ", response.toString())
                         viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.IdNoMissing)
                         viewModel.loginResultEmitter.emit(SignUpViewModel.LoginResult.NameMissing)
@@ -135,6 +144,12 @@ class SignUpFragment : Fragment() {
         //add user to database via an API
         BuilderClass.apiService.verifyUser(userEntry).awaitResponse()
 
+    }
+
+    fun View.hideKeyboard() {
+        val imm =  getSystemService(context,
+            InputMethodManager::class.java) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
 

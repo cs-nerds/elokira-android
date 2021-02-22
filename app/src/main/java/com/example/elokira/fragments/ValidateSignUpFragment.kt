@@ -56,6 +56,10 @@ class ValidateSignUpFragment : Fragment() {
         idNumber.text = args.idNumber
 
         binding.validateSignUp.setOnClickListener {
+            val loadingProgressBar = binding.loadingPanel
+            loadingProgressBar.visibility = View.VISIBLE
+            val validateSignUp = binding.validateSignUp
+            validateSignUp.visibility = View.INVISIBLE
 
             val phoneNumber = binding.phoneNumber.text.toString()
             val verifiedUser = VerifiedUser(args.firstName,args.lastName, args.idNumber, phoneNumber)
@@ -81,6 +85,8 @@ class ValidateSignUpFragment : Fragment() {
                         viewModel.verifiedResponseEmitter.emit(ValidateSignUpViewModel.VerifiedResponse.UserExists)
                     }
                     else -> {
+                        loadingProgressBar.visibility=View.INVISIBLE
+                        validateSignUp.visibility = View.VISIBLE
                         Log.i("Verified Login with any other code ${response.code()}", response.message().toString() )
                         viewModel.verifiedResponseEmitter.emit(ValidateSignUpViewModel.VerifiedResponse.NetworkFailure)
                     }
