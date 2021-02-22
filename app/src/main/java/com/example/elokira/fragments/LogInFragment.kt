@@ -3,14 +3,22 @@ package com.example.elokira.fragments
 import Authenticate
 import LoginRequest
 import ResultObserver
+import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -74,6 +82,13 @@ class LogInFragment : Fragment() {
                 ResultObserver.IdNoMissing ->{
                     idNoError.error = "Enter id number as in your ID"
                     idNoError.requestFocus()
+                    val textView = binding.idNotFound
+                    textView.visibility = View.VISIBLE
+                    val text = clickableString()
+                    textView.setText(text)
+                    textView.movementMethod = LinkMovementMethod.getInstance()
+                    textView.highlightColor = Color.TRANSPARENT
+
                 }
                 ResultObserver.Success ->{
                     findNavController().navigate(LogInFragmentDirections.actionLogInFragmentToGetCodeFragment())
@@ -86,5 +101,22 @@ class LogInFragment : Fragment() {
     private suspend fun loginUser(loginUserId: LoginRequest): Response<Authenticate> = withContext(Dispatchers.IO){
         BuilderClass.apiService.loginUser(loginUserId).awaitResponse()
     }
+
+    private fun clickableString(): SpannableString{
+        val spannableString = SpannableString("ID number not found: Sign in")
+        val clickableSpan = object : ClickableSpan(){
+            override fun onClick(textView: View) {
+                findNavController().navigate(LogInFragmentDirections.actionLogInFragmentToSignUpFragment())
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.isUnderlineText = false
+            }
+        }
+        spannableString.setSpan(clickableSpan, 21, 28, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE )
+        return spannableString
+    }
+
 
 }

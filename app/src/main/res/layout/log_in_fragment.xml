@@ -30,6 +30,15 @@
 
                 />
         </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/id_not_found"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/button_top_margin"
+            android:textColorLink="@color/blue_link"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:textStyle="normal"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/getCode"
