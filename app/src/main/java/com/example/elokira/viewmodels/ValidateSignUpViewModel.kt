@@ -13,6 +13,8 @@ class ValidateSignUpViewModel : ViewModel() {
     sealed class VerifiedResponse{
         object PhoneNoMissing: ValidateSignUpViewModel.VerifiedResponse()
 
+        object UserExists: ValidateSignUpViewModel.VerifiedResponse()
+
         class NetworkError(val userMessage: String) : ValidateSignUpViewModel.VerifiedResponse()
 
         object NetworkFailure : ValidateSignUpViewModel.VerifiedResponse()

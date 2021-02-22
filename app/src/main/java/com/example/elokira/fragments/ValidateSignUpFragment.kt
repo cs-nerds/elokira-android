@@ -77,7 +77,8 @@ class ValidateSignUpFragment : Fragment() {
                     }
                     409 -> {
                         Log.i("Verified Login message with code 409 = ${response.code()}", response.message())
-                        viewModel.verifiedResponseEmitter.emit(ValidateSignUpViewModel.VerifiedResponse.NetworkFailure)
+                        Toast.makeText(context, response.errorBody().toString(), Toast.LENGTH_SHORT).show()
+                        viewModel.verifiedResponseEmitter.emit(ValidateSignUpViewModel.VerifiedResponse.UserExists)
                     }
                     else -> {
                         Log.i("Verified Login with any other code ${response.code()}", response.message().toString() )
@@ -98,6 +99,10 @@ class ValidateSignUpFragment : Fragment() {
               }
               ValidateSignUpViewModel.VerifiedResponse.NetworkFailure -> {
                   Toast.makeText(context, "Failed, try again", Toast.LENGTH_LONG).show()
+              }
+              ValidateSignUpViewModel.VerifiedResponse.UserExists -> {
+                  Toast.makeText(context, "res", Toast.LENGTH_SHORT).show()
+                  findNavController().navigate(ValidateSignUpFragmentDirections.actionValidateSignUpFragmentToLogInFragment2())
               }
               ValidateSignUpViewModel.VerifiedResponse.Success -> {
                   Toast.makeText(context, "Check sms for code", Toast.LENGTH_LONG).show()

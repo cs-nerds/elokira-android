@@ -71,6 +71,9 @@
         <argument
             android:name="idNumber"
             app:argType="string" />
+        <action
+            android:id="@+id/action_validateSignUpFragment_to_logInFragment2"
+            app:destination="@id/logInFragment" />
     </fragment>
     <fragment
         android:id="@+id/getCodeFragment"
