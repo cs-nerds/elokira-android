@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/linear_layout_margin"
+        android:layout_marginEnd="@dimen/linear_layout_margin">
+        <TextView
+            android:id="@+id/names"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/linear_layout_margin"
+
+            style="@style/TextAppearance.AppCompat.Large"
+            android:textStyle="bold"/>
+        <!--            tools:text="@tools:sample/full_names"-->
+
+        <TextView
+            android:id="@+id/valid_id_no"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottom_edit_text_margin"
+            tools:text="37366004"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottom_edit_text_margin"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:text="Log out"
+            android:textStyle="bold|italic"/>
+
+    </LinearLayout>
+
+</layout>

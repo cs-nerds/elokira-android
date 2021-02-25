@@ -1,0 +1,61 @@
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginStart="@dimen/linear_layout_margin"
+    android:layout_marginEnd="@dimen/linear_layout_margin">
+
+    <FrameLayout
+        android:id="@+id/speaker_avatar_container"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/placeholder"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/circle"
+            android:textColor="@color/white"/>
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="200dp"
+            android:layout_height="200dp" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/names"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/linear_layout_margin"
+        tools:text="@tools:sample/full_names"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"/>
+
+
+    <TextView
+        android:id="@+id/valid_id_no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/bottom_edit_text_margin"
+        tools:text="37366004"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/bottom_edit_text_margin"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:text="Log out"
+        android:textStyle="bold|italic"/>
+
+</LinearLayout>
+
+</layout>

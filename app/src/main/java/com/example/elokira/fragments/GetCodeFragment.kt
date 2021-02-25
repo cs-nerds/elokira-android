@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -29,6 +31,7 @@ class GetCodeFragment : Fragment() {
 
     companion object {
         fun newInstance() = GetCodeFragment()
+
     }
 
     private lateinit var viewModel: GetCodeViewModel
@@ -50,6 +53,7 @@ class GetCodeFragment : Fragment() {
         val args = GetCodeFragmentArgs.fromBundle(requireArguments())
 
         binding.enterCode.setOnClickListener {
+            it.hideKeyboard()
             val code = binding.code.text.toString().trim()
             val user = Authenticate(args.loginId, code)
             viewModel.authenticateUserCode(user)
@@ -109,4 +113,11 @@ class GetCodeFragment : Fragment() {
         BuilderClass.apiService.authenticateUser(user).awaitResponse()
     }
 
+    fun View.hideKeyboard() {
+        val imm =  ContextCompat.getSystemService(
+            context,
+            InputMethodManager::class.java
+        ) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
+    }
 }
