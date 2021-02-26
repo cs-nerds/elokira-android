@@ -1,8 +1,7 @@
 package com.example.elokira.fragments
 
-import MyAdapter
+import ElectionsAdapter
 import ResultObserver
-import android.app.Activity
 import android.content.Context.MODE_PRIVATE
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -11,22 +10,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.elokira.viewmodels.HomeViewModel
 import com.example.elokira.R
 import com.example.elokira.data.Election
-import com.example.elokira.data.UserDetails
+import com.example.elokira.databinding.ElectionsLayoutBinding
 import com.example.elokira.databinding.HomeFragmentBinding
-import com.example.elokira.databinding.NavHeaderBinding
 import com.example.elokira.repositories.BuilderClass
-import com.google.android.material.navigation.NavigationView
 import com.zhuinden.eventemitter.EventEmitter
 import com.zhuinden.eventemitter.EventSource
 import com.zhuinden.liveevent.observe
 import kotlinx.coroutines.*
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.awaitResponse
 
@@ -40,7 +38,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: HomeFragmentBinding
     private var electionsList: List<Election?> = listOf()
     private var recyclerView : RecyclerView? = null
-    private var adapter: MyAdapter? = null
+    private lateinit var buttonbinding: ElectionsLayoutBinding
     val electionsResultEmitter = EventEmitter<ResultObserver>()
     val electionResult : EventSource<ResultObserver> = electionsResultEmitter
 
@@ -85,14 +83,29 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+//        buttonbinding.participate.setOnClickListener {
+//            postElection()
+//        }
         electionResult.observe(this){result ->
             when(result){
                 ResultObserver.Success ->{
                     val progress = binding.loadingPanel
                     progress.visibility = View.GONE
 
+                    val listListener = fun(election: Election) {
+                        findNavController().navigate(
+                            HomeFragmentDirections.actionHomeFragmentToVotingFragment(election.electionId)
+                        )
+                    }
+
+                    val participateListener = fun(election: Election) {
+                        Log.i("Participate in: ", election.toString())
+
+                    }
+
                     recyclerView = binding.recyclerView
-                    adapter = MyAdapter(electionsList)
+                    val adapter = ElectionsAdapter(electionsList, listListener, participateListener)
                     recyclerView!!.adapter = adapter
                 }
             }
@@ -101,15 +114,35 @@ class HomeFragment : Fragment() {
 
     }
 
-    private suspend fun getElection(bearer: String): Response<List<Election>> = withContext(Dispatchers.IO){
-     val response = BuilderClass.apiService.getElections(bearer).awaitResponse()
-        when(response.isSuccessful){
-            true -> return@withContext response
-            false -> electionsResultEmitter.emit(ResultObserver.NetworkError(response.message()))
-        }
-        return@withContext response
+    private fun postingElection(election: Election, bearer: String){
+        lifecycleScope.launch{
+            val response = postElection(election, bearer)
+            Log.i("Participating in ${response.code()}", response.body().toString())
+            when(response.code()){
+                200 ->{
+                    
+                }
+                401 -> {
 
+                }
+                else -> {
+
+                }
+            }
+        }
     }
+
+    private suspend fun getElection(bearer: String): Response<List<Election>> = withContext(Dispatchers.IO){
+     BuilderClass.apiService.getElections(bearer).awaitResponse()
+    }
+
+    private suspend fun postElection(election: Election, bearer: String): Response<ResponseBody> = withContext(Dispatchers.IO){
+        BuilderClass.apiService.postElections(election, bearer).awaitResponse()
+    }
+
+
+
+
 
 //    fun user(bearer: String): UserDetails {
 //        val response = runBlocking {

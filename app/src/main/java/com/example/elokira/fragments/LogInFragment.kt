@@ -17,7 +17,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
@@ -55,6 +57,7 @@ class LogInFragment : Fragment() {
         val idNoError = binding.idNoLoginErr
         // TODO: Use the ViewModel
         binding.getCode.setOnClickListener {
+            it.hideKeyboard()
             val idNumber = LoginRequest(binding.idNumberLogin.text.toString().trim())
             viewModel.loginUser(idNumber)
 
@@ -124,6 +127,13 @@ class LogInFragment : Fragment() {
         return spannableString
     }
 
+    fun View.hideKeyboard() {
+        val imm =  ContextCompat.getSystemService(
+            context,
+            InputMethodManager::class.java
+        ) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
+    }
 //    fun returnResponse(loginID: LoginRequest): Deferred<Response<Authenticate>> = lifecycleScope.async{
 //        val response = loginUser(loginID)
 //

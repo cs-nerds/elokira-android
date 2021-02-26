@@ -6,13 +6,12 @@ import LoginRequest
 import User
 import VerifiedUser
 import com.example.elokira.data.Election
+import com.example.elokira.data.Position
 import com.example.elokira.data.UserDetails
 import com.example.elokira.data.UserResponse
+import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface CreateUser {
 //    /users/verify
@@ -33,5 +32,11 @@ interface CreateUser {
 
    @GET("/elections")
    fun getElections(@Header("Authorization") bearer:String ):Call<List<Election>>
+
+   @POST("/elections/participate")
+   fun postElections(@Body election: Election, @Header("Authorization") bearer: String): Call<ResponseBody>
+
+   @GET
+   fun getElectionPositions(@Url url: String, @Header("Authorization") bearer: String): Call<List<Position>>
 
 }
