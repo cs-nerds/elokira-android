@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -32,6 +33,7 @@ class HomeFragment : Fragment() {
 
     companion object {
         fun newInstance() = HomeFragment()
+
     }
 
     private lateinit var viewModel: HomeViewModel
@@ -101,7 +103,7 @@ class HomeFragment : Fragment() {
                     val participateListener = fun(election: Election) {
                         Log.i("Participate in: ", election.toString())
                         Log.i("Participate time", "${System.currentTimeMillis()}")
-
+                        postingElection(election, bearer)
 
                     }
 
