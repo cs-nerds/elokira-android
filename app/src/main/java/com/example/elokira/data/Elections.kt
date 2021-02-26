@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 data class Election(
     val electionId: String,
     val electionName: String,
-    val StartDate: String,
-    val stopDate: String,
+    val StartDate: Long,
+    val stopDate: Long,
     val createdBy: String,
     val dateModified: String
         )

@@ -12,6 +12,8 @@ class ElectionsAdapter(
     val listListener: (Election) -> Unit,
     val participateListener: (Election) -> Unit
     ) : RecyclerView.Adapter<ElectionsAdapter.ViewHolder>() {
+
+    val currentTime = System.currentTimeMillis()
     override fun onCreateViewHolder(parent: ViewGroup, i: Int): ViewHolder {
 //        val context = parent.context
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -25,6 +27,10 @@ class ElectionsAdapter(
         holder.bind(item)
         holder.itemView.setOnClickListener{ listListener(item!!)}
         holder.binding.participate.setOnClickListener{participateListener(item!!)
+            holder.binding.participate.setText(R.string.Vote)
+            if( currentTime != item.stopDate ){
+
+            }
         }
     }
 

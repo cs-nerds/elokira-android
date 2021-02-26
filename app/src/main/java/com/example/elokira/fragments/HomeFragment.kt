@@ -38,7 +38,6 @@ class HomeFragment : Fragment() {
     private lateinit var binding: HomeFragmentBinding
     private var electionsList: List<Election?> = listOf()
     private var recyclerView : RecyclerView? = null
-    private lateinit var buttonbinding: ElectionsLayoutBinding
     val electionsResultEmitter = EventEmitter<ResultObserver>()
     val electionResult : EventSource<ResultObserver> = electionsResultEmitter
 
@@ -101,6 +100,8 @@ class HomeFragment : Fragment() {
 
                     val participateListener = fun(election: Election) {
                         Log.i("Participate in: ", election.toString())
+                        Log.i("Participate time", "${System.currentTimeMillis()}")
+
 
                     }
 
@@ -120,7 +121,7 @@ class HomeFragment : Fragment() {
             Log.i("Participating in ${response.code()}", response.body().toString())
             when(response.code()){
                 200 ->{
-                    
+
                 }
                 401 -> {
 
