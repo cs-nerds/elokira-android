@@ -2,6 +2,7 @@ package com.example.elokira.repositories
 
 import AuthToken
 import Authenticate
+import Candidate
 import LoginRequest
 import User
 import VerifiedUser
@@ -38,5 +39,9 @@ interface CreateUser {
 
    @GET
    fun getElectionPositions(@Url url: String, @Header("Authorization") bearer: String): Call<List<Position>>
+
+   @GET
+   fun getPositionCandidates(@Url url: String, @Header("Authorization") bearer: String): Call<List<Candidate>>
+
 
 }

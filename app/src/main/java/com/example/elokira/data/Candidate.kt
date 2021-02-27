@@ -1,6 +1,7 @@
 data class Candidate(
-    val candidateName: String,
-    val CandidateId: String,
-    val electionId: String,
-    val positionId: String
+    val candidateId: String,
+    val positionId: String,
+    val candidateFirstName: String,
+    val candidateLastName: String,
+    val positionName: String
 )

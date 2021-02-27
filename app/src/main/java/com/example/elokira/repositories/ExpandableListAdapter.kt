@@ -11,8 +11,8 @@ import com.example.elokira.data.Position
 
 class ExpandableListAdapter(
     private val context: Context,
-    private val positions: List<Position>,
-    private val candidates: HashMap<Position, List<Candidate>>
+    private val positions: List<String>,
+    private val candidates: HashMap<String, List<String>>
 ): BaseExpandableListAdapter(){
     override fun getGroupCount(): Int {
         return this.positions.size

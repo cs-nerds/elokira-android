@@ -2,9 +2,14 @@ package com.example.elokira.fragments
 
 import ElectionsAdapter
 import ResultObserver
+import android.app.Activity
+import android.app.StatusBarManager
 import android.content.Context.MODE_PRIVATE
+import android.graphics.Color
+import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -48,6 +53,11 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false)
+        val s = "<b><big>ELokiraVote<big></b>"
+        val ss = "<b><big>Elections<big></b>"
+        binding.toolbar.setTitle(Html.fromHtml(s))
+        binding.toolbar.setSubtitle(Html.fromHtml(ss))
+        activity?.setTransparentStatusBar()
         return binding.root
     }
 
@@ -70,11 +80,11 @@ class HomeFragment : Fragment() {
             Log.i("Response body: ", "${response.body()}")
             Log.i("Response body: ", response.body().toString())
             when(response.code()){
-                200 ->{
+                404 ->{
                     Log.i("token", response.body()?.map { it.electionName }.toString())
-                    electionsList = response.body()!!
+//                    electionsList = response.body()!!
                     electionsResultEmitter.emit(ResultObserver.Success)
-                    response.body()
+//                    response.body()
                 }
                 401 -> {
                     Log.i("token failure", "failed")
@@ -143,7 +153,12 @@ class HomeFragment : Fragment() {
         BuilderClass.apiService.postElections(election, bearer).awaitResponse()
     }
 
-
+    fun Activity.setTransparentStatusBar() {
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = Color.TRANSPARENT
+        }
+    }
 
 
 
