@@ -5,6 +5,7 @@ import ExpandableListAdapter
 import ResultObserver
 import android.content.Context
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -37,8 +38,6 @@ class VotingFragment : Fragment() {
     private lateinit var viewModel: VotingViewModel
     private lateinit var binding: VotingFragmentBinding
     private var positions: List<Position?> = listOf()
-    val PositionsResultEmitter = EventEmitter<ResultObserver>()
-    val positionResult : EventSource<ResultObserver> = PositionsResultEmitter
     val listCandidates = HashMap<Position, List<Candidate>>()
     var positionCandidate: Position? = null
 
@@ -48,8 +47,12 @@ class VotingFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+
         binding = DataBindingUtil.inflate(inflater, R.layout.voting_fragment, container, false)
+        val ss = "<br/><b><big>Vote<big></b>"
+        binding.toolbar.setLogo(R.drawable.elokira_logo)
+        binding.toolbar.setTitle(Html.fromHtml(ss))
         binding.toolbar.setTitle(R.string.Vote)
         return binding.root
     }
@@ -70,47 +73,51 @@ class VotingFragment : Fragment() {
         val args = VotingFragmentArgs.fromBundle(requireArguments())
         val url = "/elections/${args.electionId}/positions"
         Log.i("Url", url)
-        lifecycleScope.launch {
-            val response = getPositions(url, bearer)
-            Log.i("Positions (${response.code()}", response.body().toString())
-            when(response.code()){
-                200 -> {
-                    positions = response.body()!!
-                    val position = positions[0]?.positionId
-                    positionCandidate = positions[0]
-                    val url = "/elections/${args.electionId}/positions/$position"
-                    val candidateResponse = getCandidates(url, bearer)
-                    Log.i(
-                        "Positions (${candidateResponse.code()}",
-                        candidateResponse.body().toString()
-                    )
-                    PositionsResultEmitter.emit(ResultObserver.Success)
+        viewModel.PositionsResultEmitter.emit(ResultObserver.Success)
 
-//                    when (candidateResponse.code()) {
-//                        404 -> {
-//                            val candidateResponse = candidateResponse.body()
-//                            if (candidateResponse != null) {
-//                                positionCandidate?.let { listCandidates.put(it, candidateResponse) }
-//                            }
-//                            PositionsResultEmitter.emit(ResultObserver.Success)
-//                        }
-//                        else -> {
-//                            val candidateResponse = candidateResponse.body()
-//                            if (candidateResponse != null) {
-//                                positionCandidate?.let { listCandidates.put(it, candidateResponse) }
-//                            }
+
+//        lifecycleScope.launch {
+//            val response = getPositions(url, bearer)
+//            Log.i("Positions (${response.code()}", response.body().toString())
+//
+//            when(response.code()){
+//                200 -> {
+//                    positions = response.body()!!
+//                    val position = positions[0]?.positionId
+//                    positionCandidate = positions[0]
+//                    val url = "/elections/${args.electionId}/positions/$position"
+//                    val candidateResponse = getCandidates(url, bearer)
+//                    Log.i(
+//                        "Positions (${candidateResponse.code()}",
+//                        candidateResponse.body().toString()
+//                    )
+//                    viewModel.PositionsResultEmitter.emit(ResultObserver.Success)
+//
+////                    when (candidateResponse.code()) {
+////                        404 -> {
+////                            val candidateResponse = candidateResponse.body()
+////                            if (candidateResponse != null) {
+////                                positionCandidate?.let { listCandidates.put(it, candidateResponse) }
+////                            }
 ////                            PositionsResultEmitter.emit(ResultObserver.Success)
-//                        }
-//                    }
+////                        }
+////                        else -> {
+////                            val candidateResponse = candidateResponse.body()
+////                            if (candidateResponse != null) {
+////                                positionCandidate?.let { listCandidates.put(it, candidateResponse) }
+////                            }
+//////                            PositionsResultEmitter.emit(ResultObserver.Success)
+////                        }
+////                    }
+//
+//                }
+//                else -> {
+//                    viewModel.PositionsResultEmitter.emit(ResultObserver.NetworkFailure)
+//                }
+//            }
+//        }
 
-                }
-                else -> {
-                    PositionsResultEmitter.emit(ResultObserver.NetworkFailure)
-                }
-            }
-        }
-
-        positionResult.observe(this){ result ->
+        viewModel.positionResult.observe(this){ result ->
             when(result){
                 ResultObserver.Success -> {
                     val progress = binding.loadingPanel
@@ -118,7 +125,7 @@ class VotingFragment : Fragment() {
 
                     val positionTitles = binding.lvExp
 
-
+                    prepareListData()
                     val listAdapter = ExpandableListAdapter(requireContext(), listDataHeader!!, listDataChild!!)
                     Log.i("List Adapter", "${listDataHeader} ${listDataChild}")
 

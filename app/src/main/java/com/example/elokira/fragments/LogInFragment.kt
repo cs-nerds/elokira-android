@@ -112,7 +112,7 @@ class LogInFragment : Fragment() {
     }
 
     private fun clickableString(): SpannableString{
-        val spannableString = SpannableString("ID number not found: Sign in")
+        val spannableString = SpannableString("ID number not found: Sign Up")
         val clickableSpan = object : ClickableSpan(){
             override fun onClick(textView: View) {
                 findNavController().navigate(LogInFragmentDirections.actionLogInFragmentToSignUpFragment())

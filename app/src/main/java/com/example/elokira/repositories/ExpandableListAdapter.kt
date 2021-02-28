@@ -4,8 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
+import android.widget.ListView
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.example.elokira.R
 import com.example.elokira.data.Position
 
@@ -14,6 +16,7 @@ class ExpandableListAdapter(
     private val positions: List<String>,
     private val candidates: HashMap<String, List<String>>
 ): BaseExpandableListAdapter(){
+
     override fun getGroupCount(): Int {
         return this.positions.size
     }
@@ -72,17 +75,32 @@ class ExpandableListAdapter(
         val candidateName = convertView!!.findViewById<TextView>(R.id.candidateName)
         candidateName.text = expandedListText
 
+
         val radioButton = convertView.findViewById<RadioButton>(R.id.vote_radio_button)
         val childCheckedState: HashMap<Int, Int> = HashMap()
          try {
-             radioButton.setChecked(expandedListPosition == childCheckedState.get(listPosition))
+             if(childCheckedState != null){
+                 if(childCheckedState.size > 0){
+                     radioButton.isChecked = expandedListPosition == childCheckedState[listPosition]
+                 }
+             }
          }catch (e: Exception){
              e.printStackTrace()
          }
-        radioButton.tag = expandedListPosition
+
         radioButton.setOnClickListener {
-            childCheckedState.put(listPosition, it.getTag() as Int)
-            notifyDataSetChanged()
+            for(i in 0 until groupCount-1){
+                for(k in 0..getChildrenCount(i)){
+                    radioButton.isChecked = false
+                    childCheckedState.remove(i, k)
+
+                }
+                radioButton.isChecked = expandedListPosition == childCheckedState[listPosition]
+                radioButton.tag = expandedListPosition
+                childCheckedState.put(i, expandedListPosition)
+                notifyDataSetChanged()
+            }
+
         }
         return convertView
     }
