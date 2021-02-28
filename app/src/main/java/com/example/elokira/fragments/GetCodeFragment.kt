@@ -36,7 +36,7 @@ class GetCodeFragment : Fragment() {
 
     private lateinit var viewModel: GetCodeViewModel
     private lateinit var binding: GetCodeFragmentBinding
-    private lateinit var authTokenJWT: AuthToken
+    private  var authTokenJWT: AuthToken? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -92,7 +92,7 @@ class GetCodeFragment : Fragment() {
                 ResultObserver.Success ->{
                     val preferences = activity?.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE) ?: return@observe
                     with(preferences.edit()){
-                        putString("Authentication Code", authTokenJWT.token)
+                        putString("Authentication Code", authTokenJWT?.token)
                         apply()
                     }
                     findNavController().navigate(GetCodeFragmentDirections.actionGetCodeFragmentToHomeFragment())

@@ -10,20 +10,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Checkable
+import android.widget.ListView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.elokira.data.Position
 import com.example.elokira.databinding.VotingFragmentBinding
 import com.example.elokira.repositories.BuilderClass
 import com.example.elokira.viewmodels.VotingViewModel
-import com.zhuinden.eventemitter.EventEmitter
-import com.zhuinden.eventemitter.EventSource
 import com.zhuinden.liveevent.observe
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import retrofit2.awaitResponse
@@ -72,8 +70,14 @@ class VotingFragment : Fragment() {
 
         val args = VotingFragmentArgs.fromBundle(requireArguments())
         val url = "/elections/${args.electionId}/positions"
-        Log.i("Url", url)
-        viewModel.PositionsResultEmitter.emit(ResultObserver.Success)
+         Log.i("Url", url)
+//        binding.lvExp.choiceMode = ListView.CHOICE_MODE_SINGLE
+//        if (mChoiceMode !== AbsListView.CHOICE_MODE_NONE && mCheckStates != null) {
+//            if (child is Checkable) {
+//                (child as Checkable).isChecked = mCheckStates.get(position)
+//            }
+//        }
+//        viewModel.PositionsResultEmitter.emit(ResultObserver.Success)
 
 
 //        lifecycleScope.launch {
@@ -123,13 +127,17 @@ class VotingFragment : Fragment() {
                     val progress = binding.loadingPanel
                     progress.visibility = View.GONE
 
-                    val positionTitles = binding.lvExp
+                    val positionTitles = binding.candidateList
 
                     prepareListData()
-                    val listAdapter = ExpandableListAdapter(requireContext(), listDataHeader!!, listDataChild!!)
+                    val listAdapter = ExpandableListAdapter(
+                        requireContext(),
+                        listDataHeader!!,
+                        listDataChild!!
+                    )
                     Log.i("List Adapter", "${listDataHeader} ${listDataChild}")
 
-                    positionTitles.setAdapter(listAdapter)
+//                    positionTitles.setAdapter(listAdapter)
                 }
                 ResultObserver.NetworkFailure -> {
                     Toast.makeText(context, "Network Failure", Toast.LENGTH_LONG).show()

@@ -32,7 +32,7 @@ class ValidateSignUpFragment : Fragment() {
 
     private lateinit var viewModel: ValidateSignUpViewModel
     private lateinit var binding: ValidateSignUpFragmentBinding
-    private lateinit var login: Authenticate
+    private  var login: Authenticate? = null
 
 
     override fun onCreateView(
@@ -111,7 +111,8 @@ class ValidateSignUpFragment : Fragment() {
               }
               ValidateSignUpViewModel.VerifiedResponse.Success -> {
                   Toast.makeText(context, "Check sms for code", Toast.LENGTH_LONG).show()
-                  findNavController().navigate(ValidateSignUpFragmentDirections.actionValidateSignUpFragmentToGetCodeFragment(login.loginId))
+                  findNavController().navigate(ValidateSignUpFragmentDirections.actionValidateSignUpFragmentToGetCodeFragment(
+                      login!!.loginId))
               }
               else -> Toast.makeText(context, "Network Error", Toast.LENGTH_LONG).show()
           }

@@ -13,7 +13,10 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:fitsSystemWindows="true"
+            android:minHeight="?attr/actionBarSize">
         </androidx.appcompat.widget.Toolbar>
         <RelativeLayout
             android:id="@+id/loadingPanel"
@@ -31,10 +34,24 @@
         </RelativeLayout>
 
 
-        <ExpandableListView
-            android:id="@+id/lvExp"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/positionList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            tools:listitem="@layout/list_group"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="10">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/candidateList"
+            tools:listitem="@layout/list_item"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="10"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:visibility="gone"/>
+
+        </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
 

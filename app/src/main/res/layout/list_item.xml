@@ -5,34 +5,35 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"
         android:layout_marginStart="@dimen/bottom_edit_text_margin"
         android:layout_marginEnd="@dimen/bottom_edit_text_margin"
-        android:padding="@dimen/linear_layout_margin"
-        android:elevation="@dimen/bottom_edit_text_margin"
-        app:contentPadding="8dp"
-        android:layout_margin="4dp"
-        app:cardUseCompatPadding="true">
+        android:elevation="4dp"
+        android:padding="8dp"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="8dp">
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="55dip">
+            android:layout_height="30dip">
+
             <TextView
                 android:id="@+id/candidateName"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textSize="17sp"
+                android:layout_alignParentStart="true"
+                android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                tools:text="@tools:sample/full_names"
-                android:layout_alignParentStart="true"
-                android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"/>
+                android:textSize="17sp"
+                tools:text="@tools:sample/full_names" />
 
             <RadioButton
                 android:id="@+id/vote_radio_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                />
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </layout>
