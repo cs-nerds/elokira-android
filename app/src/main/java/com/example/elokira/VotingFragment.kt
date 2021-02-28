@@ -1,7 +1,7 @@
 package com.example.elokira
 
 import Candidate
-import ExpandableListAdapter
+import PositionsAdapter
 import ResultObserver
 import android.content.Context
 import android.os.Bundle
@@ -16,12 +16,15 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.example.elokira.data.Position
 import com.example.elokira.databinding.VotingFragmentBinding
 import com.example.elokira.repositories.BuilderClass
 import com.example.elokira.viewmodels.VotingViewModel
 import com.zhuinden.liveevent.observe
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import retrofit2.awaitResponse
@@ -38,6 +41,9 @@ class VotingFragment : Fragment() {
     private var positions: List<Position?> = listOf()
     val listCandidates = HashMap<Position, List<Candidate>>()
     var positionCandidate: Position? = null
+
+    private var recyclerView: RecyclerView? = null
+    private var adapter: PositionsAdapter? = null
 
     var listDataHeader: List<String>? = null
     var listDataChild: HashMap<String, List<String>>? = null
@@ -71,55 +77,48 @@ class VotingFragment : Fragment() {
         val args = VotingFragmentArgs.fromBundle(requireArguments())
         val url = "/elections/${args.electionId}/positions"
          Log.i("Url", url)
-//        binding.lvExp.choiceMode = ListView.CHOICE_MODE_SINGLE
-//        if (mChoiceMode !== AbsListView.CHOICE_MODE_NONE && mCheckStates != null) {
-//            if (child is Checkable) {
-//                (child as Checkable).isChecked = mCheckStates.get(position)
-//            }
-//        }
-//        viewModel.PositionsResultEmitter.emit(ResultObserver.Success)
 
 
-//        lifecycleScope.launch {
-//            val response = getPositions(url, bearer)
-//            Log.i("Positions (${response.code()}", response.body().toString())
-//
-//            when(response.code()){
-//                200 -> {
-//                    positions = response.body()!!
-//                    val position = positions[0]?.positionId
-//                    positionCandidate = positions[0]
-//                    val url = "/elections/${args.electionId}/positions/$position"
+        lifecycleScope.launch {
+            val response = getPositions(url, bearer)
+            Log.i("Positions (${response.code()}", response.body().toString())
+
+            when(response.code()){
+                200 -> {
+                    positions = response.body()!!
+                    val position = positions[0]?.positionId
+                    positionCandidate = positions[0]
+                    val url = "/elections/${args.electionId}/positions/$position"
 //                    val candidateResponse = getCandidates(url, bearer)
 //                    Log.i(
-//                        "Positions (${candidateResponse.code()}",
+//                        "Candidates (${candidateResponse.code()}",
 //                        candidateResponse.body().toString()
 //                    )
-//                    viewModel.PositionsResultEmitter.emit(ResultObserver.Success)
-//
-////                    when (candidateResponse.code()) {
-////                        404 -> {
-////                            val candidateResponse = candidateResponse.body()
-////                            if (candidateResponse != null) {
-////                                positionCandidate?.let { listCandidates.put(it, candidateResponse) }
-////                            }
+                    viewModel.PositionsResultEmitter.emit(ResultObserver.Success)
+
+//                    when (candidateResponse.code()) {
+//                        404 -> {
+//                            val candidateResponse = candidateResponse.body()
+//                            if (candidateResponse != null) {
+//                                positionCandidate?.let { listCandidates.put(it, candidateResponse) }
+//                            }
+//                            PositionsResultEmitter.emit(ResultObserver.Success)
+//                        }
+//                        else -> {
+//                            val candidateResponse = candidateResponse.body()
+//                            if (candidateResponse != null) {
+//                                positionCandidate?.let { listCandidates.put(it, candidateResponse) }
+//                            }
 ////                            PositionsResultEmitter.emit(ResultObserver.Success)
-////                        }
-////                        else -> {
-////                            val candidateResponse = candidateResponse.body()
-////                            if (candidateResponse != null) {
-////                                positionCandidate?.let { listCandidates.put(it, candidateResponse) }
-////                            }
-//////                            PositionsResultEmitter.emit(ResultObserver.Success)
-////                        }
-////                    }
-//
-//                }
-//                else -> {
-//                    viewModel.PositionsResultEmitter.emit(ResultObserver.NetworkFailure)
-//                }
-//            }
-//        }
+//                        }
+//                    }
+
+                }
+                else -> {
+                    viewModel.PositionsResultEmitter.emit(ResultObserver.NetworkFailure)
+                }
+            }
+        }
 
         viewModel.positionResult.observe(this){ result ->
             when(result){
@@ -127,17 +126,10 @@ class VotingFragment : Fragment() {
                     val progress = binding.loadingPanel
                     progress.visibility = View.GONE
 
-                    val positionTitles = binding.candidateList
+                    recyclerView = binding.positionList
+                    val adapter = PositionsAdapter(positions)
+                    recyclerView?.adapter = adapter
 
-                    prepareListData()
-                    val listAdapter = ExpandableListAdapter(
-                        requireContext(),
-                        listDataHeader!!,
-                        listDataChild!!
-                    )
-                    Log.i("List Adapter", "${listDataHeader} ${listDataChild}")
-
-//                    positionTitles.setAdapter(listAdapter)
                 }
                 ResultObserver.NetworkFailure -> {
                     Toast.makeText(context, "Network Failure", Toast.LENGTH_LONG).show()
